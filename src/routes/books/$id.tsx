@@ -37,7 +37,7 @@ function RouteComponent() {
 	if (error) return <div>エラーが発生しました</div>;
 
 	return (
-		<div className="p-4 grid gap-4">
+		<div className="grid gap-4 p-4">
 			<div>
 				<p className="font-bold">シリーズ名 </p>
 				<p>{data?.seriesName}</p>

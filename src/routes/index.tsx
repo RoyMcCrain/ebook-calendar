@@ -57,7 +57,7 @@ function RouteComponent() {
 	if (isLoading) return <div>読み込み中...</div>;
 	if (error) return <div>エラーが発生しました</div>;
 	return (
-		<div className="p-4 grid gap-4">
+		<div className="grid gap-4 p-4">
 			{/* 検索フォームをシンプルな入力欄に変更 */}
 			<div>
 				<Input
