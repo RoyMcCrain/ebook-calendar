@@ -46,13 +46,14 @@ type Response = {
 const MANGA_GENRE_ID = "101904"; // 電子書籍のジャンルID
 
 // データ取得用の関数
-export default async function () {
+export default async function fetchBooks({ page = 1 }: { page?: number } = {}) {
 	const params = new URLSearchParams({
 		applicationId: import.meta.env.VITE_KOBO_APP_ID,
 		sort: "-releaseDate", // 新刊順にソート
 		koboGenreId: MANGA_GENRE_ID,
 		hits: "10", // 最大10件取得
 		formatVersion: "2", // レスポンスのフォーマットバージョン
+		page: page.toString(), // ページ番号を追加
 	});
 
 	const response = await fetch(

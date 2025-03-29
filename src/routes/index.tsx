@@ -1,16 +1,38 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
+import * as v from "valibot";
+import Pagination from "#/components/ui/pagination";
 import fetchBooks from "#/lib/queries/books";
 
+// ルート定義にsearchParamsスキーマを追加
 export const Route = createFileRoute("/")({
 	component: RouteComponent,
+	validateSearch: v.object({
+		page: v.optional(v.fallback(v.number(), 1), 1),
+	}),
 });
 
 function RouteComponent() {
-	const { data } = useQuery({
-		queryKey: ["Books"],
-		queryFn: fetchBooks,
+	const { page } = Route.useSearch();
+	const navigate = Route.useNavigate();
+
+	const { data, isLoading, error } = useQuery({
+		queryKey: ["Books", page],
+		queryFn: () => fetchBooks({ page }),
 	});
+
+	const totalPages = data?.pageCount || 1;
+
+	// ページ変更ハンドラー
+	const handlePageChange = (newPage: number) => {
+		navigate({
+			search: { page: newPage },
+		});
+	};
+
+	if (isLoading) return <div>読み込み中...</div>;
+	if (error) return <div>エラーが発生しました</div>;
+
 	return (
 		<div>
 			<h1>Welcome to the app!</h1>
@@ -40,6 +62,13 @@ function RouteComponent() {
 					</div>
 				))}
 			</div>
+
+			{/* ページネーションコンポーネントの使用 */}
+			<Pagination
+				currentPage={page}
+				totalPages={totalPages}
+				onPageChange={handlePageChange}
+			/>
 		</div>
 	);
 }
