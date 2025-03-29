@@ -13,8 +13,6 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
-import { Route as BooksIndexImport } from './routes/books/index'
-import { Route as BooksListImport } from './routes/books/list'
 import { Route as BooksIdImport } from './routes/books/$id'
 
 // Create/Update Routes
@@ -28,18 +26,6 @@ const LoginRoute = LoginImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const BooksIndexRoute = BooksIndexImport.update({
-  id: '/books/',
-  path: '/books/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const BooksListRoute = BooksListImport.update({
-  id: '/books/list',
-  path: '/books/list',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -74,20 +60,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BooksIdImport
       parentRoute: typeof rootRoute
     }
-    '/books/list': {
-      id: '/books/list'
-      path: '/books/list'
-      fullPath: '/books/list'
-      preLoaderRoute: typeof BooksListImport
-      parentRoute: typeof rootRoute
-    }
-    '/books/': {
-      id: '/books/'
-      path: '/books'
-      fullPath: '/books'
-      preLoaderRoute: typeof BooksIndexImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -97,16 +69,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/books/$id': typeof BooksIdRoute
-  '/books/list': typeof BooksListRoute
-  '/books': typeof BooksIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/books/$id': typeof BooksIdRoute
-  '/books/list': typeof BooksListRoute
-  '/books': typeof BooksIndexRoute
 }
 
 export interface FileRoutesById {
@@ -114,16 +82,14 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/books/$id': typeof BooksIdRoute
-  '/books/list': typeof BooksListRoute
-  '/books/': typeof BooksIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/books/$id' | '/books/list' | '/books'
+  fullPaths: '/' | '/login' | '/books/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/books/$id' | '/books/list' | '/books'
-  id: '__root__' | '/' | '/login' | '/books/$id' | '/books/list' | '/books/'
+  to: '/' | '/login' | '/books/$id'
+  id: '__root__' | '/' | '/login' | '/books/$id'
   fileRoutesById: FileRoutesById
 }
 
@@ -131,16 +97,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
   BooksIdRoute: typeof BooksIdRoute
-  BooksListRoute: typeof BooksListRoute
-  BooksIndexRoute: typeof BooksIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
   BooksIdRoute: BooksIdRoute,
-  BooksListRoute: BooksListRoute,
-  BooksIndexRoute: BooksIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -155,9 +117,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/login",
-        "/books/$id",
-        "/books/list",
-        "/books/"
+        "/books/$id"
       ]
     },
     "/": {
@@ -168,12 +128,6 @@ export const routeTree = rootRoute
     },
     "/books/$id": {
       "filePath": "books/$id.tsx"
-    },
-    "/books/list": {
-      "filePath": "books/list.tsx"
-    },
-    "/books/": {
-      "filePath": "books/index.tsx"
     }
   }
 }

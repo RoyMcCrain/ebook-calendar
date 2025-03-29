@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { Button } from "#/components/ui/button";
 
 // ページネーションコンポーネントのプロパティ定義
 type Props = {
@@ -54,63 +55,59 @@ const Pagination: FC<Props> = ({ currentPage, totalPages, onPageChange }) => {
 	return (
 		<div className="flex items-center justify-center gap-2 p-4">
 			{/* 最初へボタン */}
-			<button
+			<Button
 				type="button"
 				onClick={handleFirstPage}
 				disabled={currentPage === 1}
-				className="rounded bg-blue-500 px-3 py-2 text-white disabled:bg-gray-300"
+				variant="outline"
 			>
 				最初へ
-			</button>
+			</Button>
 
 			{/* 前へボタン */}
-			<button
+			<Button
 				type="button"
 				onClick={handlePrevPage}
 				disabled={currentPage === 1}
-				className="rounded bg-blue-500 px-3 py-2 text-white disabled:bg-gray-300"
+				variant="outline"
 			>
 				前へ
-			</button>
+			</Button>
 
 			{/* ページ番号ボタン */}
 			<div className="flex gap-1">
 				{getVisiblePageNumbers().map((pageNum) => (
-					<button
+					<Button
 						key={pageNum}
 						type="button"
 						onClick={() => onPageChange(pageNum)}
 						disabled={currentPage === pageNum}
-						className={`h-9 w-9 rounded ${
-							currentPage === pageNum
-								? "bg-blue-700 text-white"
-								: "bg-blue-500 text-white hover:bg-blue-600"
-						}`}
+						variant="outline"
 					>
 						{pageNum}
-					</button>
+					</Button>
 				))}
 			</div>
 
 			{/* 次へボタン */}
-			<button
+			<Button
 				type="button"
 				onClick={handleNextPage}
 				disabled={currentPage >= totalPages}
-				className="rounded bg-blue-500 px-3 py-2 text-white disabled:bg-gray-300"
+				variant="outline"
 			>
 				次へ
-			</button>
+			</Button>
 
 			{/* 最後へボタン */}
-			<button
+			<Button
 				type="button"
 				onClick={handleLastPage}
 				disabled={currentPage >= totalPages}
-				className="rounded bg-blue-500 px-3 py-2 text-white disabled:bg-gray-300"
+				variant="outline"
 			>
 				最後へ
-			</button>
+			</Button>
 
 			{/* ページ数表示 */}
 			<div className="ml-3 rounded bg-gray-100 px-3 py-2 text-gray-700">

@@ -1,5 +1,3 @@
-import camelcaseKeys from "camelcase-keys";
-// 全体情報
 type GeneralInfo = {
 	count: number; // 検索結果の総商品数
 	page: number; // 現在のページ番号
@@ -10,7 +8,7 @@ type GeneralInfo = {
 };
 
 // 商品情報詳細
-type ItemDetail = {
+export type ItemDetail = {
 	title: string; // 書籍タイトル
 	titleKana?: string; // 書籍タイトル カナ（任意）
 	subTitle?: string; // 書籍サブタイトル（任意）
@@ -32,7 +30,7 @@ type ItemDetail = {
 };
 
 // APIレスポンス全体の型定義
-type Response = {
+export type Response = {
 	generalInfo: GeneralInfo;
 	items: ItemDetail[];
 	count: number; // 検索結果の総商品数
@@ -42,27 +40,3 @@ type Response = {
 	hits: number; // 1度に返却する商品数
 	pageCount: number; // 総ページ数（最大100）
 };
-
-const MANGA_GENRE_ID = "101904"; // 電子書籍のジャンルID
-
-// データ取得用の関数
-export default async function fetchBooks({ page = 1 }: { page?: number } = {}) {
-	const params = new URLSearchParams({
-		applicationId: import.meta.env.VITE_KOBO_APP_ID,
-		sort: "-releaseDate", // 新刊順にソート
-		koboGenreId: MANGA_GENRE_ID,
-		hits: "10", // 最大10件取得
-		formatVersion: "2", // レスポンスのフォーマットバージョン
-		page: page.toString(), // ページ番号を追加
-	});
-
-	const response = await fetch(
-		`${import.meta.env.VITE_KOBO_API_URL}?${params.toString()}`,
-	);
-	if (!response.ok) {
-		throw new Error("データ取得に失敗しました");
-	}
-
-	const data: Response = await response.json();
-	return camelcaseKeys(data, { deep: true });
-}
