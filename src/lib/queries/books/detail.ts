@@ -6,36 +6,18 @@ const MANGA_GENRE_ID = "101904"; // 電子書籍のジャンルID
 
 export async function fetchBookDetail({
 	page = 1,
-	itemNumber,
-}: { page?: number; itemNumber: string }): Promise<
-	Response & { seriesName: string }
-> {
-	const bookDetailParams = new URLSearchParams({
-		applicationId: import.meta.env.VITE_KOBO_APP_ID,
-		itemNumber,
-		koboGenreId: MANGA_GENRE_ID,
-		formatVersion: "2", // レスポンスのフォーマットバージョン
-	});
-
+	seriesName,
+}: {
+	page?: number;
+	seriesName: string;
+}): Promise<Response> {
+	if (seriesName === "") {
+		throw new Error("シリーズ名が空です");
+	}
 	const url = new URL(import.meta.env.VITE_KOBO_API_URL);
-	url.search = bookDetailParams.toString();
-
-	const bookDetailResponse = await fetch(url);
-	if (!bookDetailResponse.ok) {
-		throw new Error("データ取得に失敗しました");
-	}
-
-	const bookDetailData: Response = await bookDetailResponse.json();
-	const result = camelcaseKeys(bookDetailData, { deep: true });
-
-	if (!result.items[0].seriesName) {
-		// シリーズ名がない場合は、ページを取得しない
-		return { ...result, seriesName: "" };
-	}
-
 	const seriesParams = new URLSearchParams({
 		applicationId: import.meta.env.VITE_KOBO_APP_ID,
-		keyword: result.items[0].seriesName ?? "",
+		keyword: seriesName,
 		sort: "-releaseDate", // 新刊順にソート
 		koboGenreId: MANGA_GENRE_ID,
 		hits: "10", // 最大10件取得
@@ -48,18 +30,17 @@ export async function fetchBookDetail({
 		throw new Error("データ取得に失敗しました");
 	}
 	const seriesData: Response = await seriesResponse.json();
-	const res = camelcaseKeys(seriesData, { deep: true });
-	return { ...res, seriesName: result.items[0].seriesName };
+	return camelcaseKeys(seriesData, { deep: true });
 }
 
 export default function ({
 	page,
-	itemNumber,
+	seriesName,
 	...props
-}: { page: number; itemNumber: string; [key: string]: unknown }) {
+}: { page: number; seriesName: string; [key: string]: unknown }) {
 	return queryOptions({
 		...props,
-		queryKey: ["books-detail", page, itemNumber],
-		queryFn: () => fetchBookDetail({ page, itemNumber }),
+		queryKey: ["books-detail", page, seriesName],
+		queryFn: () => fetchBookDetail({ page, seriesName }),
 	});
 }

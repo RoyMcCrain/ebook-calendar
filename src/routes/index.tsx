@@ -86,8 +86,10 @@ function RouteComponent() {
 								variant="link"
 								onClick={() => {
 									navigate({
-										to: "/books/$id",
-										params: { id: v.itemNumber },
+										to: "/books/series",
+										search: {
+											seriesName: v.seriesName,
+										},
 									});
 								}}
 							>

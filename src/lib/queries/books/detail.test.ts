@@ -43,28 +43,21 @@ const server = setupServer(
 	// 本の詳細情報APIのハンドラー
 	http.get("https://api.example.com/books", ({ request }) => {
 		const url = new URL(request.url);
-		const itemNumber = url.searchParams.get("itemNumber");
+		const seriesName = url.searchParams.get("seriesName");
 		const keyword = url.searchParams.get("keyword");
 
-		// 詳細情報リクエストの場合
-		if (itemNumber === "123456") {
+		// seriesNameが空の場合はエラーを返す
+		if (seriesName === "") {
+			return new HttpResponse(null, { status: 400 });
+		}
+
+		// 詳細情報リクエストの場合 - シリーズ名があるケース
+		if (seriesName === "テストシリーズ") {
 			return HttpResponse.json(mockBookDetailData);
 		}
 		// シリーズ名で検索する場合
 		if (keyword === "テストシリーズ") {
 			return HttpResponse.json(mockSeriesData);
-		}
-		// シリーズ名なしのデータリクエストの場合
-		if (itemNumber === "999999") {
-			return HttpResponse.json({
-				Items: [
-					{
-						item_number: "999999",
-						title: "シリーズなし本",
-						// series_nameなし
-					},
-				],
-			});
 		}
 
 		return HttpResponse.json({ Items: [] });
@@ -78,7 +71,7 @@ afterAll(() => server.close());
 
 describe("fetchBookDetail", () => {
 	it("シリーズ名がある場合、本の詳細と関連シリーズ情報を取得するっス", async () => {
-		const result = await fetchBookDetail({ itemNumber: "123456" });
+		const result = await fetchBookDetail({ seriesName: "テストシリーズ" });
 
 		// 検証
 		expect(result.items).toHaveLength(2);
@@ -86,16 +79,6 @@ describe("fetchBookDetail", () => {
 		expect(result.items[0].title).toBe("テスト本");
 		expect(result.items[0].seriesName).toBe("テストシリーズ");
 		expect(result.items[1].itemNumber).toBe("123457");
-	});
-
-	it("シリーズ名がない場合、本の詳細情報のみを取得するっス", async () => {
-		const result = await fetchBookDetail({ itemNumber: "999999" });
-
-		// 検証
-		expect(result.items).toHaveLength(1);
-		expect(result.items[0].itemNumber).toBe("999999");
-		expect(result.items[0].title).toBe("シリーズなし本");
-		expect(result.items[0].seriesName).toBeUndefined();
 	});
 
 	it("APIエラー時に適切にエラーをスローするっス", async () => {
@@ -107,9 +90,9 @@ describe("fetchBookDetail", () => {
 		);
 
 		// エラーがスローされることを検証
-		await expect(fetchBookDetail({ itemNumber: "123456" })).rejects.toThrow(
-			"データ取得に失敗しました",
-		);
+		await expect(
+			fetchBookDetail({ seriesName: "テストシリーズ" }),
+		).rejects.toThrow("データ取得に失敗しました");
 	});
 
 	it("ページパラメータが正しく渡されるかテストするっス", async () => {
@@ -142,11 +125,21 @@ describe("fetchBookDetail", () => {
 			}),
 		);
 
-		const result = await fetchBookDetail({ itemNumber: "123456", page: 2 });
+		const result = await fetchBookDetail({
+			seriesName: "テストシリーズ",
+			page: 2,
+		});
 
 		// 検証
 		expect(result.items).toHaveLength(1);
 		expect(result.items[0].itemNumber).toBe("123458");
 		expect(result.items[0].title).toBe("テスト本3");
+	});
+
+	it("シリーズ名が空の場合、エラーになるっス", async () => {
+		// エラーがスローされることを検証
+		await expect(fetchBookDetail({ seriesName: "" })).rejects.toThrow(
+			"シリーズ名が空です",
+		);
 	});
 });

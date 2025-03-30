@@ -7,24 +7,30 @@ import { Card, CardContent, CardHeader, CardTitle } from "#/components/ui/card";
 import Pagination from "#/components/ui/pagination";
 import queryOptions from "#/lib/queries/books/detail";
 
-export const Route = createFileRoute("/books/$id")({
+export const Route = createFileRoute("/books/series")({
 	component: RouteComponent,
 	validateSearch: v.object({
 		page: v.optional(v.fallback(v.number(), 1), 1),
+		seriesName: v.optional(v.string(), ""),
 	}),
-	loaderDeps: ({ search: { page } }) => ({ page }),
-	loader: ({ context: { queryClient }, params: { id }, deps: { page } }) => {
-		return queryClient.ensureQueryData(queryOptions({ itemNumber: id, page }));
+	loaderDeps: ({ search: { page, seriesName } }) => ({
+		page,
+		seriesName,
+	}),
+	loader: ({
+		context: { queryClient },
+		deps: { page, seriesName, },
+	}) => {
+		return queryClient.ensureQueryData(queryOptions({ seriesName, page }));
 	},
 });
 
 function RouteComponent() {
-	const { id } = Route.useParams();
-	const { page } = Route.useSearch();
+	const { page, seriesName } = Route.useSearch();
 	const navigate = Route.useNavigate();
 
 	const { data, isLoading, error } = useQuery(
-		queryOptions({ itemNumber: id, page }),
+		queryOptions({ seriesName, page }),
 	);
 
 	const totalPages = data?.pageCount || 1;
@@ -43,7 +49,7 @@ function RouteComponent() {
 		<div className="grid gap-4 p-4">
 			<div>
 				<p className="font-bold">シリーズ名 </p>
-				<p>{data?.seriesName}</p>
+				<p>{seriesName}</p>
 			</div>
 
 			<div className="grid grid-cols-[repeat(auto-fill,minmax(30rem,1fr))] gap-4">
