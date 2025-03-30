@@ -1,4 +1,4 @@
-import { type QueriesOptions, queryOptions } from "@tanstack/react-query";
+import { queryOptions } from "@tanstack/react-query";
 import camelcaseKeys from "camelcase-keys";
 import type { Response } from "#/lib/queries/type";
 
