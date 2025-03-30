@@ -64,8 +64,6 @@ export async function fetchBooks({
 	return camelcasedData;
 }
 
-
-
 export default function ({
 	page,
 	keyword,

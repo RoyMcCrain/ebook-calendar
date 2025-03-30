@@ -17,10 +17,7 @@ export const Route = createFileRoute("/books/series")({
 		page,
 		seriesName,
 	}),
-	loader: ({
-		context: { queryClient },
-		deps: { page, seriesName, },
-	}) => {
+	loader: ({ context: { queryClient }, deps: { page, seriesName } }) => {
 		return queryClient.ensureQueryData(queryOptions({ seriesName, page }));
 	},
 });
