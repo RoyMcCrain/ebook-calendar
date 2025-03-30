@@ -1,3 +1,4 @@
+import { type QueriesOptions, queryOptions } from "@tanstack/react-query";
 import camelcaseKeys from "camelcase-keys";
 import type { Response } from "#/lib/queries/type";
 
@@ -61,4 +62,18 @@ export async function fetchBooks({
 	}
 
 	return camelcasedData;
+}
+
+
+
+export default function ({
+	page,
+	keyword,
+	...props
+}: { page: number; keyword: string; [key: string]: unknown }) {
+	return queryOptions({
+		...props,
+		queryKey: ["books-detail", page, keyword],
+		queryFn: () => fetchBooks({ page, keyword: keyword }),
+	});
 }

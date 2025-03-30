@@ -18,7 +18,7 @@ if (!PUBLISHABLE_KEY) {
 // Create a new router instance
 const router = createRouter({
 	routeTree,
-	context: {},
+	context: { queryClient },
 	defaultPreload: "intent",
 	scrollRestoration: true,
 	defaultStructuralSharing: true,
@@ -40,7 +40,7 @@ if (rootElement && !rootElement.innerHTML) {
 		<StrictMode>
 			<ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/login">
 				<QueryClientProvider client={queryClient}>
-					<RouterProvider router={router} />
+					<RouterProvider router={router} context={{ queryClient }} />
 				</QueryClientProvider>
 			</ClerkProvider>
 		</StrictMode>,

@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "#/components/ui/card";
 import { Input } from "#/components/ui/input";
 import Pagination from "#/components/ui/pagination";
 import { useDebounce } from "#/hooks/useDebounce";
-import { fetchBooks } from "#/lib/queries/books/list";
+import queryOptions from "#/lib/queries/books/list";
 
 export const Route = createFileRoute("/")({
 	component: RouteComponent,
@@ -16,6 +16,13 @@ export const Route = createFileRoute("/")({
 		page: v.optional(v.fallback(v.number(), 1), 1),
 		keyword: v.optional(v.string(), ""),
 	}),
+	loaderDeps: ({ search: { page, keyword } }) => ({ page, keyword }),
+	loader: ({ context: { queryClient }, deps: { page, keyword } }) => {
+		if (keyword === "") {
+			return;
+		}
+		return queryClient.ensureQueryData(queryOptions({ page, keyword }));
+	},
 });
 
 function RouteComponent() {
@@ -34,11 +41,13 @@ function RouteComponent() {
 		}
 	}, [debouncedKeyword, navigate, keyword]);
 
-	const { data, isLoading, error } = useQuery({
-		queryKey: ["books", page, keyword],
-		queryFn: () => fetchBooks({ page, keyword }),
-		enabled: !!keyword,
-	});
+	const { data, isLoading, error } = useQuery(
+		queryOptions({
+			enabled: debouncedKeyword !== "",
+			page,
+			keyword: debouncedKeyword,
+		}),
+	);
 
 	const totalPages = data?.pageCount || 1;
 

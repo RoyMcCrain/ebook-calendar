@@ -5,13 +5,17 @@ import * as v from "valibot";
 import { Button } from "#/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "#/components/ui/card";
 import Pagination from "#/components/ui/pagination";
-import { fetchBookDetail } from "#/lib/queries/books/detail";
+import queryOptions from "#/lib/queries/books/detail";
 
 export const Route = createFileRoute("/books/$id")({
 	component: RouteComponent,
 	validateSearch: v.object({
 		page: v.optional(v.fallback(v.number(), 1), 1),
 	}),
+	loaderDeps: ({ search: { page } }) => ({ page }),
+	loader: ({ context: { queryClient }, params: { id }, deps: { page } }) => {
+		return queryClient.ensureQueryData(queryOptions({ itemNumber: id, page }));
+	},
 });
 
 function RouteComponent() {
@@ -19,10 +23,9 @@ function RouteComponent() {
 	const { page } = Route.useSearch();
 	const navigate = Route.useNavigate();
 
-	const { data, isLoading, error } = useQuery({
-		queryKey: ["books-detail", page, id],
-		queryFn: () => fetchBookDetail({ page, itemNumber: id }),
-	});
+	const { data, isLoading, error } = useQuery(
+		queryOptions({ itemNumber: id, page }),
+	);
 
 	const totalPages = data?.pageCount || 1;
 

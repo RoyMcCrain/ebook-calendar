@@ -1,3 +1,4 @@
+import { queryOptions } from "@tanstack/react-query";
 import camelcaseKeys from "camelcase-keys";
 import type { Response } from "#/lib/queries/type";
 
@@ -49,4 +50,16 @@ export async function fetchBookDetail({
 	const seriesData: Response = await seriesResponse.json();
 	const res = camelcaseKeys(seriesData, { deep: true });
 	return { ...res, seriesName: result.items[0].seriesName };
+}
+
+export default function ({
+	page,
+	itemNumber,
+	...props
+}: { page: number; itemNumber: string; [key: string]: unknown }) {
+	return queryOptions({
+		...props,
+		queryKey: ["books-detail", page, itemNumber],
+		queryFn: () => fetchBookDetail({ page, itemNumber }),
+	});
 }
