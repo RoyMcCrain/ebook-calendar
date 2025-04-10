@@ -1,301 +1,156 @@
-Welcome to your new TanStack app! 
+# ebook-calendar
 
-# Getting Started
+電子書籍（主に漫画）の新刊情報を検索・表示するためのウェブアプリケーションです。
 
-To run this application:
+## アプリケーション概要
+
+ebook-calendarは、楽天Kobo APIを利用して漫画シリーズの発売日を管理するためのアプリケーションです。毎月多数の電子書籍（主に漫画）を購入するユーザーが、新刊の発売日を効率的に管理できるように設計されています。
+
+### 主な機能
+
+- マンガの検索機能
+- マンガの登録と削除機能
+- 登録したマンガの新刊情報をカレンダーに表示（Googleカレンダー連携）
+- マンガの詳細ページから楽天Koboのページへの遷移
+- ユーザー認証機能
+- 毎月の新刊発売日のメール通知
+- 発売日当日のメール通知
+
+このアプリケーションは、従来のKindle向けのベルアラートのような機能をKobo電子書籍向けに提供し、新刊の発売を見逃さないようにしたいユーザーのために開発されています。
+
+## 技術スタック
+
+- React 19.0.0
+- TypeScript
+- Vite（ビルドツール）
+- TanStack Router（ルーティング）
+- TanStack Query（データフェッチング）
+- Tailwind CSS（スタイリング）
+- Clerk（認証）
+- Vitest（テスト）
+- Biome（リンティング・フォーマット）
+
+## 開発ガイドライン
+
+### 環境構築
+
+1. リポジトリをクローン
+2. 依存関係をインストール
+   ```bash
+   pnpm install
+   ```
+3. 環境変数を設定
+   - `.env.local`ファイルを作成し、以下の変数を設定
+     ```
+     VITE_KOBO_API_URL=https://app.rakuten.co.jp/services/api/Kobo/EbookSearch/20170426
+     VITE_KOBO_APP_ID=あなたの楽天アプリケーションID
+     ```
+
+### 開発コマンド
 
 ```bash
-pnpm install
-pnpm start  
-```
+# 開発サーバーの起動（ポート3000）
+pnpm dev
 
-# Building For Production
-
-To build this application for production:
-
-```bash
+# プロダクションビルド
 pnpm build
-```
 
-## Testing
-
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
-
-```bash
+# テストの実行
 pnpm test
-```
 
-## Styling
-
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-
-
-## Linting & Formatting
-
-This project uses [Biome](https://biomejs.dev/) for linting and formatting. The following scripts are available:
-
-
-```bash
-pnpm lint
+# コードのフォーマット
 pnpm format
+
+# リンティング
+pnpm lint
+
+# コードチェック
 pnpm check
 ```
 
+### コーディング規約
 
+- コンポーネントはTypeScriptで記述
+- ファイルベースのルーティングを使用
+- データフェッチングにはTanStack Queryを使用
+- UIコンポーネントはTailwind CSSでスタイリング
+- コードはコミット前にフォーマットとリンティングを実行
 
-## Routing
-This project uses [TanStack Router](https://tanstack.com/router). The initial setup is a file based router. Which means that the routes are managed as files in `src/routes`.
+### ディレクトリ構造
 
-### Adding A Route
-
-To add a new route to your application just add another a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
+```
+src/
+├── components/  # UIコンポーネント
+├── hooks/       # カスタムフック
+├── lib/         # ユーティリティと共通関数
+│   └── queries/ # データフェッチング関連
+├── routes/      # ルート定義（ファイルベース）
+└── main.tsx     # エントリーポイント
 ```
 
-Then anywhere in your JSX you can use it like so:
 
-```tsx
-<Link to="/about">About</Link>
-```
+## 主要機能の詳細
 
-This will create a link that will navigate to the `/about` route.
+### 検索機能
+- キーワードによる漫画タイトルの検索
+- 検索結果は新刊順に表示（発売日管理に最適）
+- 検索入力にはデバウンス処理を適用（2秒）
 
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
+### 検索と登録機能
+- キーワードによるマンガタイトルの検索
+- 検索結果は新刊順に表示
+- マンガシリーズの登録と削除が可能
+- 検索入力にはデバウンス処理を適用（2秒）
 
-### Using A Layout
+### カレンダー連携
+- 登録したマンガの新刊情報をカレンダーに表示
+- Googleカレンダーとの連携機能
+- 発売日情報を一目で確認可能
 
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you use the `<Outlet />` component.
+### 書籍情報表示
+- 表紙画像
+- タイトル
+- 著者名
+- シリーズ名
+- 発売日情報
+- 楽天Koboストアへの購入リンク
 
-Here is an example layout that includes a header:
+### 通知機能
+- 毎月の新刊発売日をメールで通知
+- 発売日当日にもメール通知
+- 見逃しを防止する通知システム
 
-```tsx
-import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+## 貢献ガイドライン
 
-import { Link } from "@tanstack/react-router";
+### プルリクエスト
+1. 新機能の追加や修正は新しいブランチで作業
+2. コードはコミット前にフォーマットとリンティングを実行
+3. テストを追加または更新
+4. プルリクエストには変更内容の詳細な説明を記載
 
-export const Route = createRootRoute({
-  component: () => (
-    <>
-      <header>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-        </nav>
-      </header>
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
-  ),
-})
-```
+### 機能追加時の注意点
+- 既存のコンポーネント構造とスタイルに合わせる
+- データフェッチングは`lib/queries`ディレクトリに追加
+- 新しいルートは`routes`ディレクトリに追加
+- UIコンポーネントは`components/ui`ディレクトリに追加
 
-The `<TanStackRouterDevtools />` component is not required so you can remove it if you don't want it in your layout.
+## ライセンス
 
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
+このプロジェクトはMITライセンスの下で公開されています。
 
+## 謝辞
 
-## Data Fetching
+このプロジェクトは[楽天Kobo API](https://webservice.rakuten.co.jp/api/koboebooksearch/)を使用しています。
 
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
+## 認証機能
 
-For example:
+- ユーザー認証機能
+- セキュアなユーザー管理
+- 個人ごとのマンガ登録情報の保存
 
-```tsx
-const peopleRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/people",
-  loader: async () => {
-    const response = await fetch("https://swapi.dev/api/people");
-    return response.json() as Promise<{
-      results: {
-        name: string;
-      }[];
-    }>;
-  },
-  component: () => {
-    const data = peopleRoute.useLoaderData();
-    return (
-      <ul>
-        {data.results.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    );
-  },
-});
-```
+## 今後の開発計画
 
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-### React-Query
-
-React-Query is an excellent addition or alternative to route loading and integrating it into you application is a breeze.
-
-First add your dependencies:
-
-```bash
-pnpm add @tanstack/react-query @tanstack/react-query-devtools
-```
-
-Next we'll need to create a query client and provider. We recommend putting those in `main.tsx`.
-
-```tsx
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-// ...
-
-const queryClient = new QueryClient();
-
-// ...
-
-if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement);
-
-  root.render(
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  );
-}
-```
-
-You can also add TanStack Query Devtools to the root route (optional).
-
-```tsx
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-const rootRoute = createRootRoute({
-  component: () => (
-    <>
-      <Outlet />
-      <ReactQueryDevtools buttonPosition="top-right" />
-      <TanStackRouterDevtools />
-    </>
-  ),
-});
-```
-
-Now you can use `useQuery` to fetch your data.
-
-```tsx
-import { useQuery } from "@tanstack/react-query";
-
-import "./App.css";
-
-function App() {
-  const { data } = useQuery({
-    queryKey: ["people"],
-    queryFn: () =>
-      fetch("https://swapi.dev/api/people")
-        .then((res) => res.json())
-        .then((data) => data.results as { name: string }[]),
-    initialData: [],
-  });
-
-  return (
-    <div>
-      <ul>
-        {data.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-export default App;
-```
-
-You can find out everything you need to know on how to use React-Query in the [React-Query documentation](https://tanstack.com/query/latest/docs/framework/react/overview).
-
-## State Management
-
-Another common requirement for React applications is state management. There are many options for state management in React. TanStack Store provides a great starting point for your project.
-
-First you need to add TanStack Store as a dependency:
-
-```bash
-pnpm add @tanstack/store
-```
-
-Now let's create a simple counter in the `src/App.tsx` file as a demonstration.
-
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store } from "@tanstack/store";
-import "./App.css";
-
-const countStore = new Store(0);
-
-function App() {
-  const count = useStore(countStore);
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>
-        Increment - {count}
-      </button>
-    </div>
-  );
-}
-
-export default App;
-```
-
-One of the many nice features of TanStack Store is the ability to derive state from other state. That derived state will update when the base state updates.
-
-Let's check this out by doubling the count using derived state.
-
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store, Derived } from "@tanstack/store";
-import "./App.css";
-
-const countStore = new Store(0);
-
-const doubledStore = new Derived({
-  fn: () => countStore.state * 2,
-  deps: [countStore],
-});
-doubledStore.mount();
-
-function App() {
-  const count = useStore(countStore);
-  const doubledCount = useStore(doubledStore);
-
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>
-        Increment - {count}
-      </button>
-      <div>Doubled - {doubledCount}</div>
-    </div>
-  );
-}
-
-export default App;
-```
-
-We use the `Derived` class to create a new store that is derived from another store. The `Derived` class has a `mount` method that will start the derived store updating.
-
-Once we've created the derived store we can use it in the `App` component just like we would any other store using the `useStore` hook.
-
-You can find out everything you need to know on how to use TanStack Store in the [TanStack Store documentation](https://tanstack.com/store/latest).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
+- モバイル対応の強化
+- 通知設定のカスタマイズ機能
+- 発売日予測機能の追加
+- 複数のストアからの情報統合
