@@ -1,3 +1,6 @@
+/**
+ * Button component with various styles and sizes
+ */
 import { Slot } from "@radix-ui/react-slot";
 import { type VariantProps, cva } from "class-variance-authority";
 import type * as React from "react";
