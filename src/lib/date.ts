@@ -13,7 +13,7 @@ export const formatToday = () => {
 /**
  * 指定した日付を「yyyy-MM-dd」形式でフォーマットして返します
  *
- * @param date - フォーマットする日付オブジェクト
+ * @param date フォーマットする日付オブジェクト
  * @returns 「yyyy-MM-dd」形式でフォーマットされた日付
  */
 export const formatDate = (date: Date) => {
