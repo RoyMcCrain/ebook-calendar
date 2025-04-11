@@ -21,8 +21,8 @@ function RouteComponent() {
 	const Link = createLink(NavigationMenuLink);
 	return (
 		<>
-			<header className="flex items-center md:gap-10 gap-4 bg-gray-100 p-4">
-				<div className="md:text-2xl text-lg md:w-full w-20">
+			<header className="flex items-center gap-4 bg-gray-100 p-4 md:gap-10">
+				<div className="w-20 text-lg md:w-full md:text-2xl">
 					<L to="/">Ebook calendar</L>
 				</div>
 				<NavigationMenu>
