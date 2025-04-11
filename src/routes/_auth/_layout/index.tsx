@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Calendar from "#/components/calendar";
 
-export const Route = createFileRoute("/_auth/_header/")({
+export const Route = createFileRoute("/_auth/_layout/")({
 	component: RouteComponent,
 });
 

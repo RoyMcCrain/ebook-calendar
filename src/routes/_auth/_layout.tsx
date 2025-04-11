@@ -1,5 +1,10 @@
 import { UserButton } from "@clerk/clerk-react";
-import { Outlet, createFileRoute, createLink } from "@tanstack/react-router";
+import {
+	Link as L,
+	Outlet,
+	createFileRoute,
+	createLink,
+} from "@tanstack/react-router";
 import {
 	NavigationMenu,
 	NavigationMenuItem,
@@ -8,7 +13,7 @@ import {
 	navigationMenuTriggerStyle,
 } from "#/components/ui/navigation-menu";
 
-export const Route = createFileRoute("/_auth/_header")({
+export const Route = createFileRoute("/_auth/_layout")({
 	component: RouteComponent,
 });
 
@@ -16,13 +21,20 @@ function RouteComponent() {
 	const Link = createLink(NavigationMenuLink);
 	return (
 		<>
-			<header className="flex items-center gap-10 bg-gray-100 p-4">
-				<div className="text-2xl">Ebook calendar</div>
+			<header className="flex items-center md:gap-10 gap-4 bg-gray-100 p-4">
+				<div className="md:text-2xl text-lg md:w-full w-20">
+					<L to="/">Ebook calendar</L>
+				</div>
 				<NavigationMenu>
 					<NavigationMenuList>
 						<NavigationMenuItem>
 							<Link to="/" className={navigationMenuTriggerStyle()}>
-								Home
+								Calendar
+							</Link>
+						</NavigationMenuItem>
+						<NavigationMenuItem>
+							<Link to="/list" className={navigationMenuTriggerStyle()}>
+								List
 							</Link>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
@@ -33,10 +45,10 @@ function RouteComponent() {
 					</NavigationMenuList>
 				</NavigationMenu>
 				<div className="ml-auto">
-					<UserButton showName />
+					<UserButton />
 				</div>
 			</header>
-			<main>
+			<main className="px-12 py-4">
 				<Outlet />
 			</main>
 		</>

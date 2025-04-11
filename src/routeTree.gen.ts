@@ -13,10 +13,13 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthImport } from './routes/_auth'
-import { Route as AuthHeaderImport } from './routes/_auth/_header'
-import { Route as AuthHeaderIndexImport } from './routes/_auth/_header/index'
-import { Route as AuthHeaderSearchImport } from './routes/_auth/_header/search'
-import { Route as AuthHeaderBooksSeriesImport } from './routes/_auth/_header/books/series'
+import { Route as AuthLayoutImport } from './routes/_auth/_layout'
+import { Route as AuthLayoutIndexImport } from './routes/_auth/_layout/index'
+import { Route as AuthLayoutSearchImport } from './routes/_auth/_layout/search'
+import { Route as AuthLayoutListIndexImport } from './routes/_auth/_layout/list/index'
+import { Route as AuthLayoutListRegisterImport } from './routes/_auth/_layout/list/register'
+import { Route as AuthLayoutListDetailImport } from './routes/_auth/_layout/list/detail'
+import { Route as AuthLayoutBooksSeriesImport } from './routes/_auth/_layout/books/series'
 
 // Create/Update Routes
 
@@ -31,27 +34,45 @@ const AuthRoute = AuthImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthHeaderRoute = AuthHeaderImport.update({
-  id: '/_header',
+const AuthLayoutRoute = AuthLayoutImport.update({
+  id: '/_layout',
   getParentRoute: () => AuthRoute,
 } as any)
 
-const AuthHeaderIndexRoute = AuthHeaderIndexImport.update({
+const AuthLayoutIndexRoute = AuthLayoutIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AuthHeaderRoute,
+  getParentRoute: () => AuthLayoutRoute,
 } as any)
 
-const AuthHeaderSearchRoute = AuthHeaderSearchImport.update({
+const AuthLayoutSearchRoute = AuthLayoutSearchImport.update({
   id: '/search',
   path: '/search',
-  getParentRoute: () => AuthHeaderRoute,
+  getParentRoute: () => AuthLayoutRoute,
 } as any)
 
-const AuthHeaderBooksSeriesRoute = AuthHeaderBooksSeriesImport.update({
+const AuthLayoutListIndexRoute = AuthLayoutListIndexImport.update({
+  id: '/list/',
+  path: '/list/',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+
+const AuthLayoutListRegisterRoute = AuthLayoutListRegisterImport.update({
+  id: '/list/register',
+  path: '/list/register',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+
+const AuthLayoutListDetailRoute = AuthLayoutListDetailImport.update({
+  id: '/list/detail',
+  path: '/list/detail',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+
+const AuthLayoutBooksSeriesRoute = AuthLayoutBooksSeriesImport.update({
   id: '/books/series',
   path: '/books/series',
-  getParentRoute: () => AuthHeaderRoute,
+  getParentRoute: () => AuthLayoutRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -72,104 +93,159 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/_auth/_header': {
-      id: '/_auth/_header'
+    '/_auth/_layout': {
+      id: '/_auth/_layout'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof AuthHeaderImport
+      preLoaderRoute: typeof AuthLayoutImport
       parentRoute: typeof AuthImport
     }
-    '/_auth/_header/search': {
-      id: '/_auth/_header/search'
+    '/_auth/_layout/search': {
+      id: '/_auth/_layout/search'
       path: '/search'
       fullPath: '/search'
-      preLoaderRoute: typeof AuthHeaderSearchImport
-      parentRoute: typeof AuthHeaderImport
+      preLoaderRoute: typeof AuthLayoutSearchImport
+      parentRoute: typeof AuthLayoutImport
     }
-    '/_auth/_header/': {
-      id: '/_auth/_header/'
+    '/_auth/_layout/': {
+      id: '/_auth/_layout/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof AuthHeaderIndexImport
-      parentRoute: typeof AuthHeaderImport
+      preLoaderRoute: typeof AuthLayoutIndexImport
+      parentRoute: typeof AuthLayoutImport
     }
-    '/_auth/_header/books/series': {
-      id: '/_auth/_header/books/series'
+    '/_auth/_layout/books/series': {
+      id: '/_auth/_layout/books/series'
       path: '/books/series'
       fullPath: '/books/series'
-      preLoaderRoute: typeof AuthHeaderBooksSeriesImport
-      parentRoute: typeof AuthHeaderImport
+      preLoaderRoute: typeof AuthLayoutBooksSeriesImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_auth/_layout/list/detail': {
+      id: '/_auth/_layout/list/detail'
+      path: '/list/detail'
+      fullPath: '/list/detail'
+      preLoaderRoute: typeof AuthLayoutListDetailImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_auth/_layout/list/register': {
+      id: '/_auth/_layout/list/register'
+      path: '/list/register'
+      fullPath: '/list/register'
+      preLoaderRoute: typeof AuthLayoutListRegisterImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_auth/_layout/list/': {
+      id: '/_auth/_layout/list/'
+      path: '/list'
+      fullPath: '/list'
+      preLoaderRoute: typeof AuthLayoutListIndexImport
+      parentRoute: typeof AuthLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface AuthHeaderRouteChildren {
-  AuthHeaderSearchRoute: typeof AuthHeaderSearchRoute
-  AuthHeaderIndexRoute: typeof AuthHeaderIndexRoute
-  AuthHeaderBooksSeriesRoute: typeof AuthHeaderBooksSeriesRoute
+interface AuthLayoutRouteChildren {
+  AuthLayoutSearchRoute: typeof AuthLayoutSearchRoute
+  AuthLayoutIndexRoute: typeof AuthLayoutIndexRoute
+  AuthLayoutBooksSeriesRoute: typeof AuthLayoutBooksSeriesRoute
+  AuthLayoutListDetailRoute: typeof AuthLayoutListDetailRoute
+  AuthLayoutListRegisterRoute: typeof AuthLayoutListRegisterRoute
+  AuthLayoutListIndexRoute: typeof AuthLayoutListIndexRoute
 }
 
-const AuthHeaderRouteChildren: AuthHeaderRouteChildren = {
-  AuthHeaderSearchRoute: AuthHeaderSearchRoute,
-  AuthHeaderIndexRoute: AuthHeaderIndexRoute,
-  AuthHeaderBooksSeriesRoute: AuthHeaderBooksSeriesRoute,
+const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
+  AuthLayoutSearchRoute: AuthLayoutSearchRoute,
+  AuthLayoutIndexRoute: AuthLayoutIndexRoute,
+  AuthLayoutBooksSeriesRoute: AuthLayoutBooksSeriesRoute,
+  AuthLayoutListDetailRoute: AuthLayoutListDetailRoute,
+  AuthLayoutListRegisterRoute: AuthLayoutListRegisterRoute,
+  AuthLayoutListIndexRoute: AuthLayoutListIndexRoute,
 }
 
-const AuthHeaderRouteWithChildren = AuthHeaderRoute._addFileChildren(
-  AuthHeaderRouteChildren,
+const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
+  AuthLayoutRouteChildren,
 )
 
 interface AuthRouteChildren {
-  AuthHeaderRoute: typeof AuthHeaderRouteWithChildren
+  AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
-  AuthHeaderRoute: AuthHeaderRouteWithChildren,
+  AuthLayoutRoute: AuthLayoutRouteWithChildren,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 export interface FileRoutesByFullPath {
-  '': typeof AuthHeaderRouteWithChildren
+  '': typeof AuthLayoutRouteWithChildren
   '/login': typeof LoginRoute
-  '/search': typeof AuthHeaderSearchRoute
-  '/': typeof AuthHeaderIndexRoute
-  '/books/series': typeof AuthHeaderBooksSeriesRoute
+  '/search': typeof AuthLayoutSearchRoute
+  '/': typeof AuthLayoutIndexRoute
+  '/books/series': typeof AuthLayoutBooksSeriesRoute
+  '/list/detail': typeof AuthLayoutListDetailRoute
+  '/list/register': typeof AuthLayoutListRegisterRoute
+  '/list': typeof AuthLayoutListIndexRoute
 }
 
 export interface FileRoutesByTo {
   '': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/search': typeof AuthHeaderSearchRoute
-  '/': typeof AuthHeaderIndexRoute
-  '/books/series': typeof AuthHeaderBooksSeriesRoute
+  '/search': typeof AuthLayoutSearchRoute
+  '/': typeof AuthLayoutIndexRoute
+  '/books/series': typeof AuthLayoutBooksSeriesRoute
+  '/list/detail': typeof AuthLayoutListDetailRoute
+  '/list/register': typeof AuthLayoutListRegisterRoute
+  '/list': typeof AuthLayoutListIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/_auth/_header': typeof AuthHeaderRouteWithChildren
-  '/_auth/_header/search': typeof AuthHeaderSearchRoute
-  '/_auth/_header/': typeof AuthHeaderIndexRoute
-  '/_auth/_header/books/series': typeof AuthHeaderBooksSeriesRoute
+  '/_auth/_layout': typeof AuthLayoutRouteWithChildren
+  '/_auth/_layout/search': typeof AuthLayoutSearchRoute
+  '/_auth/_layout/': typeof AuthLayoutIndexRoute
+  '/_auth/_layout/books/series': typeof AuthLayoutBooksSeriesRoute
+  '/_auth/_layout/list/detail': typeof AuthLayoutListDetailRoute
+  '/_auth/_layout/list/register': typeof AuthLayoutListRegisterRoute
+  '/_auth/_layout/list/': typeof AuthLayoutListIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/login' | '/search' | '/' | '/books/series'
+  fullPaths:
+    | ''
+    | '/login'
+    | '/search'
+    | '/'
+    | '/books/series'
+    | '/list/detail'
+    | '/list/register'
+    | '/list'
   fileRoutesByTo: FileRoutesByTo
-  to: '' | '/login' | '/search' | '/' | '/books/series'
+  to:
+    | ''
+    | '/login'
+    | '/search'
+    | '/'
+    | '/books/series'
+    | '/list/detail'
+    | '/list/register'
+    | '/list'
   id:
     | '__root__'
     | '/_auth'
     | '/login'
-    | '/_auth/_header'
-    | '/_auth/_header/search'
-    | '/_auth/_header/'
-    | '/_auth/_header/books/series'
+    | '/_auth/_layout'
+    | '/_auth/_layout/search'
+    | '/_auth/_layout/'
+    | '/_auth/_layout/books/series'
+    | '/_auth/_layout/list/detail'
+    | '/_auth/_layout/list/register'
+    | '/_auth/_layout/list/'
   fileRoutesById: FileRoutesById
 }
 
@@ -200,32 +276,47 @@ export const routeTree = rootRoute
     "/_auth": {
       "filePath": "_auth.tsx",
       "children": [
-        "/_auth/_header"
+        "/_auth/_layout"
       ]
     },
     "/login": {
       "filePath": "login.tsx"
     },
-    "/_auth/_header": {
-      "filePath": "_auth/_header.tsx",
+    "/_auth/_layout": {
+      "filePath": "_auth/_layout.tsx",
       "parent": "/_auth",
       "children": [
-        "/_auth/_header/search",
-        "/_auth/_header/",
-        "/_auth/_header/books/series"
+        "/_auth/_layout/search",
+        "/_auth/_layout/",
+        "/_auth/_layout/books/series",
+        "/_auth/_layout/list/detail",
+        "/_auth/_layout/list/register",
+        "/_auth/_layout/list/"
       ]
     },
-    "/_auth/_header/search": {
-      "filePath": "_auth/_header/search.tsx",
-      "parent": "/_auth/_header"
+    "/_auth/_layout/search": {
+      "filePath": "_auth/_layout/search.tsx",
+      "parent": "/_auth/_layout"
     },
-    "/_auth/_header/": {
-      "filePath": "_auth/_header/index.tsx",
-      "parent": "/_auth/_header"
+    "/_auth/_layout/": {
+      "filePath": "_auth/_layout/index.tsx",
+      "parent": "/_auth/_layout"
     },
-    "/_auth/_header/books/series": {
-      "filePath": "_auth/_header/books/series.tsx",
-      "parent": "/_auth/_header"
+    "/_auth/_layout/books/series": {
+      "filePath": "_auth/_layout/books/series.tsx",
+      "parent": "/_auth/_layout"
+    },
+    "/_auth/_layout/list/detail": {
+      "filePath": "_auth/_layout/list/detail.tsx",
+      "parent": "/_auth/_layout"
+    },
+    "/_auth/_layout/list/register": {
+      "filePath": "_auth/_layout/list/register.tsx",
+      "parent": "/_auth/_layout"
+    },
+    "/_auth/_layout/list/": {
+      "filePath": "_auth/_layout/list/index.tsx",
+      "parent": "/_auth/_layout"
     }
   }
 }
