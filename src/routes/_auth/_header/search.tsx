@@ -10,7 +10,7 @@ import Pagination from "#/components/ui/pagination";
 import { useDebounce } from "#/hooks/useDebounce";
 import queryOptions from "#/lib/queries/books/list";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_auth/_header/search")({
 	component: RouteComponent,
 	validateSearch: v.object({
 		page: v.optional(v.fallback(v.number(), 1), 1),

@@ -12,8 +12,11 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
-import { Route as IndexImport } from './routes/index'
-import { Route as BooksSeriesImport } from './routes/books/series'
+import { Route as AuthImport } from './routes/_auth'
+import { Route as AuthHeaderImport } from './routes/_auth/_header'
+import { Route as AuthHeaderIndexImport } from './routes/_auth/_header/index'
+import { Route as AuthHeaderSearchImport } from './routes/_auth/_header/search'
+import { Route as AuthHeaderBooksSeriesImport } from './routes/_auth/_header/books/series'
 
 // Create/Update Routes
 
@@ -23,27 +26,43 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
+const AuthRoute = AuthImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRoute,
 } as any)
 
-const BooksSeriesRoute = BooksSeriesImport.update({
+const AuthHeaderRoute = AuthHeaderImport.update({
+  id: '/_header',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthHeaderIndexRoute = AuthHeaderIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthHeaderRoute,
+} as any)
+
+const AuthHeaderSearchRoute = AuthHeaderSearchImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => AuthHeaderRoute,
+} as any)
+
+const AuthHeaderBooksSeriesRoute = AuthHeaderBooksSeriesImport.update({
   id: '/books/series',
   path: '/books/series',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthHeaderRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -53,56 +72,115 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/books/series': {
-      id: '/books/series'
+    '/_auth/_header': {
+      id: '/_auth/_header'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthHeaderImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/_header/search': {
+      id: '/_auth/_header/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof AuthHeaderSearchImport
+      parentRoute: typeof AuthHeaderImport
+    }
+    '/_auth/_header/': {
+      id: '/_auth/_header/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthHeaderIndexImport
+      parentRoute: typeof AuthHeaderImport
+    }
+    '/_auth/_header/books/series': {
+      id: '/_auth/_header/books/series'
       path: '/books/series'
       fullPath: '/books/series'
-      preLoaderRoute: typeof BooksSeriesImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthHeaderBooksSeriesImport
+      parentRoute: typeof AuthHeaderImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AuthHeaderRouteChildren {
+  AuthHeaderSearchRoute: typeof AuthHeaderSearchRoute
+  AuthHeaderIndexRoute: typeof AuthHeaderIndexRoute
+  AuthHeaderBooksSeriesRoute: typeof AuthHeaderBooksSeriesRoute
+}
+
+const AuthHeaderRouteChildren: AuthHeaderRouteChildren = {
+  AuthHeaderSearchRoute: AuthHeaderSearchRoute,
+  AuthHeaderIndexRoute: AuthHeaderIndexRoute,
+  AuthHeaderBooksSeriesRoute: AuthHeaderBooksSeriesRoute,
+}
+
+const AuthHeaderRouteWithChildren = AuthHeaderRoute._addFileChildren(
+  AuthHeaderRouteChildren,
+)
+
+interface AuthRouteChildren {
+  AuthHeaderRoute: typeof AuthHeaderRouteWithChildren
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthHeaderRoute: AuthHeaderRouteWithChildren,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '': typeof AuthHeaderRouteWithChildren
   '/login': typeof LoginRoute
-  '/books/series': typeof BooksSeriesRoute
+  '/search': typeof AuthHeaderSearchRoute
+  '/': typeof AuthHeaderIndexRoute
+  '/books/series': typeof AuthHeaderBooksSeriesRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/books/series': typeof BooksSeriesRoute
+  '/search': typeof AuthHeaderSearchRoute
+  '/': typeof AuthHeaderIndexRoute
+  '/books/series': typeof AuthHeaderBooksSeriesRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
+  '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/books/series': typeof BooksSeriesRoute
+  '/_auth/_header': typeof AuthHeaderRouteWithChildren
+  '/_auth/_header/search': typeof AuthHeaderSearchRoute
+  '/_auth/_header/': typeof AuthHeaderIndexRoute
+  '/_auth/_header/books/series': typeof AuthHeaderBooksSeriesRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/books/series'
+  fullPaths: '' | '/login' | '/search' | '/' | '/books/series'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/books/series'
-  id: '__root__' | '/' | '/login' | '/books/series'
+  to: '' | '/login' | '/search' | '/' | '/books/series'
+  id:
+    | '__root__'
+    | '/_auth'
+    | '/login'
+    | '/_auth/_header'
+    | '/_auth/_header/search'
+    | '/_auth/_header/'
+    | '/_auth/_header/books/series'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRouteWithChildren
   LoginRoute: typeof LoginRoute
-  BooksSeriesRoute: typeof BooksSeriesRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AuthRoute: AuthRouteWithChildren,
   LoginRoute: LoginRoute,
-  BooksSeriesRoute: BooksSeriesRoute,
 }
 
 export const routeTree = rootRoute
@@ -115,19 +193,39 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/login",
-        "/books/series"
+        "/_auth",
+        "/login"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_auth": {
+      "filePath": "_auth.tsx",
+      "children": [
+        "/_auth/_header"
+      ]
     },
     "/login": {
       "filePath": "login.tsx"
     },
-    "/books/series": {
-      "filePath": "books/series.tsx"
+    "/_auth/_header": {
+      "filePath": "_auth/_header.tsx",
+      "parent": "/_auth",
+      "children": [
+        "/_auth/_header/search",
+        "/_auth/_header/",
+        "/_auth/_header/books/series"
+      ]
+    },
+    "/_auth/_header/search": {
+      "filePath": "_auth/_header/search.tsx",
+      "parent": "/_auth/_header"
+    },
+    "/_auth/_header/": {
+      "filePath": "_auth/_header/index.tsx",
+      "parent": "/_auth/_header"
+    },
+    "/_auth/_header/books/series": {
+      "filePath": "_auth/_header/books/series.tsx",
+      "parent": "/_auth/_header"
     }
   }
 }
