@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "#/components/ui/card";
 import Pagination from "#/components/ui/pagination";
 import queryOptions from "#/lib/queries/books/detail";
 
-export const Route = createFileRoute("/_auth/_layout/books/series")({
+export const Route = createFileRoute("/_layout/books/series")({
 	component: RouteComponent,
 	validateSearch: v.object({
 		page: v.optional(v.fallback(v.number(), 1), 1),

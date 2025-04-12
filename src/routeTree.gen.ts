@@ -12,14 +12,13 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
-import { Route as AuthImport } from './routes/_auth'
-import { Route as AuthLayoutImport } from './routes/_auth/_layout'
-import { Route as AuthLayoutIndexImport } from './routes/_auth/_layout/index'
-import { Route as AuthLayoutSearchImport } from './routes/_auth/_layout/search'
-import { Route as AuthLayoutListIndexImport } from './routes/_auth/_layout/list/index'
-import { Route as AuthLayoutListRegisterImport } from './routes/_auth/_layout/list/register'
-import { Route as AuthLayoutListDetailImport } from './routes/_auth/_layout/list/detail'
-import { Route as AuthLayoutBooksSeriesImport } from './routes/_auth/_layout/books/series'
+import { Route as LayoutImport } from './routes/_layout'
+import { Route as LayoutIndexImport } from './routes/_layout/index'
+import { Route as LayoutSearchImport } from './routes/_layout/search'
+import { Route as LayoutListIndexImport } from './routes/_layout/list/index'
+import { Route as LayoutListRegisterImport } from './routes/_layout/list/register'
+import { Route as LayoutListDetailImport } from './routes/_layout/list/detail'
+import { Route as LayoutBooksSeriesImport } from './routes/_layout/books/series'
 
 // Create/Update Routes
 
@@ -29,61 +28,56 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthRoute = AuthImport.update({
-  id: '/_auth',
+const LayoutRoute = LayoutImport.update({
+  id: '/_layout',
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthLayoutRoute = AuthLayoutImport.update({
-  id: '/_layout',
-  getParentRoute: () => AuthRoute,
-} as any)
-
-const AuthLayoutIndexRoute = AuthLayoutIndexImport.update({
+const LayoutIndexRoute = LayoutIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AuthLayoutRoute,
+  getParentRoute: () => LayoutRoute,
 } as any)
 
-const AuthLayoutSearchRoute = AuthLayoutSearchImport.update({
+const LayoutSearchRoute = LayoutSearchImport.update({
   id: '/search',
   path: '/search',
-  getParentRoute: () => AuthLayoutRoute,
+  getParentRoute: () => LayoutRoute,
 } as any)
 
-const AuthLayoutListIndexRoute = AuthLayoutListIndexImport.update({
+const LayoutListIndexRoute = LayoutListIndexImport.update({
   id: '/list/',
   path: '/list/',
-  getParentRoute: () => AuthLayoutRoute,
+  getParentRoute: () => LayoutRoute,
 } as any)
 
-const AuthLayoutListRegisterRoute = AuthLayoutListRegisterImport.update({
+const LayoutListRegisterRoute = LayoutListRegisterImport.update({
   id: '/list/register',
   path: '/list/register',
-  getParentRoute: () => AuthLayoutRoute,
+  getParentRoute: () => LayoutRoute,
 } as any)
 
-const AuthLayoutListDetailRoute = AuthLayoutListDetailImport.update({
+const LayoutListDetailRoute = LayoutListDetailImport.update({
   id: '/list/detail',
   path: '/list/detail',
-  getParentRoute: () => AuthLayoutRoute,
+  getParentRoute: () => LayoutRoute,
 } as any)
 
-const AuthLayoutBooksSeriesRoute = AuthLayoutBooksSeriesImport.update({
+const LayoutBooksSeriesRoute = LayoutBooksSeriesImport.update({
   id: '/books/series',
   path: '/books/series',
-  getParentRoute: () => AuthLayoutRoute,
+  getParentRoute: () => LayoutRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_auth': {
-      id: '/_auth'
+    '/_layout': {
+      id: '/_layout'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof AuthImport
+      preLoaderRoute: typeof LayoutImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -93,125 +87,105 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/_auth/_layout': {
-      id: '/_auth/_layout'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthLayoutImport
-      parentRoute: typeof AuthImport
-    }
-    '/_auth/_layout/search': {
-      id: '/_auth/_layout/search'
+    '/_layout/search': {
+      id: '/_layout/search'
       path: '/search'
       fullPath: '/search'
-      preLoaderRoute: typeof AuthLayoutSearchImport
-      parentRoute: typeof AuthLayoutImport
+      preLoaderRoute: typeof LayoutSearchImport
+      parentRoute: typeof LayoutImport
     }
-    '/_auth/_layout/': {
-      id: '/_auth/_layout/'
+    '/_layout/': {
+      id: '/_layout/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof AuthLayoutIndexImport
-      parentRoute: typeof AuthLayoutImport
+      preLoaderRoute: typeof LayoutIndexImport
+      parentRoute: typeof LayoutImport
     }
-    '/_auth/_layout/books/series': {
-      id: '/_auth/_layout/books/series'
+    '/_layout/books/series': {
+      id: '/_layout/books/series'
       path: '/books/series'
       fullPath: '/books/series'
-      preLoaderRoute: typeof AuthLayoutBooksSeriesImport
-      parentRoute: typeof AuthLayoutImport
+      preLoaderRoute: typeof LayoutBooksSeriesImport
+      parentRoute: typeof LayoutImport
     }
-    '/_auth/_layout/list/detail': {
-      id: '/_auth/_layout/list/detail'
+    '/_layout/list/detail': {
+      id: '/_layout/list/detail'
       path: '/list/detail'
       fullPath: '/list/detail'
-      preLoaderRoute: typeof AuthLayoutListDetailImport
-      parentRoute: typeof AuthLayoutImport
+      preLoaderRoute: typeof LayoutListDetailImport
+      parentRoute: typeof LayoutImport
     }
-    '/_auth/_layout/list/register': {
-      id: '/_auth/_layout/list/register'
+    '/_layout/list/register': {
+      id: '/_layout/list/register'
       path: '/list/register'
       fullPath: '/list/register'
-      preLoaderRoute: typeof AuthLayoutListRegisterImport
-      parentRoute: typeof AuthLayoutImport
+      preLoaderRoute: typeof LayoutListRegisterImport
+      parentRoute: typeof LayoutImport
     }
-    '/_auth/_layout/list/': {
-      id: '/_auth/_layout/list/'
+    '/_layout/list/': {
+      id: '/_layout/list/'
       path: '/list'
       fullPath: '/list'
-      preLoaderRoute: typeof AuthLayoutListIndexImport
-      parentRoute: typeof AuthLayoutImport
+      preLoaderRoute: typeof LayoutListIndexImport
+      parentRoute: typeof LayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface AuthLayoutRouteChildren {
-  AuthLayoutSearchRoute: typeof AuthLayoutSearchRoute
-  AuthLayoutIndexRoute: typeof AuthLayoutIndexRoute
-  AuthLayoutBooksSeriesRoute: typeof AuthLayoutBooksSeriesRoute
-  AuthLayoutListDetailRoute: typeof AuthLayoutListDetailRoute
-  AuthLayoutListRegisterRoute: typeof AuthLayoutListRegisterRoute
-  AuthLayoutListIndexRoute: typeof AuthLayoutListIndexRoute
+interface LayoutRouteChildren {
+  LayoutSearchRoute: typeof LayoutSearchRoute
+  LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutBooksSeriesRoute: typeof LayoutBooksSeriesRoute
+  LayoutListDetailRoute: typeof LayoutListDetailRoute
+  LayoutListRegisterRoute: typeof LayoutListRegisterRoute
+  LayoutListIndexRoute: typeof LayoutListIndexRoute
 }
 
-const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
-  AuthLayoutSearchRoute: AuthLayoutSearchRoute,
-  AuthLayoutIndexRoute: AuthLayoutIndexRoute,
-  AuthLayoutBooksSeriesRoute: AuthLayoutBooksSeriesRoute,
-  AuthLayoutListDetailRoute: AuthLayoutListDetailRoute,
-  AuthLayoutListRegisterRoute: AuthLayoutListRegisterRoute,
-  AuthLayoutListIndexRoute: AuthLayoutListIndexRoute,
+const LayoutRouteChildren: LayoutRouteChildren = {
+  LayoutSearchRoute: LayoutSearchRoute,
+  LayoutIndexRoute: LayoutIndexRoute,
+  LayoutBooksSeriesRoute: LayoutBooksSeriesRoute,
+  LayoutListDetailRoute: LayoutListDetailRoute,
+  LayoutListRegisterRoute: LayoutListRegisterRoute,
+  LayoutListIndexRoute: LayoutListIndexRoute,
 }
 
-const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
-  AuthLayoutRouteChildren,
-)
-
-interface AuthRouteChildren {
-  AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
-}
-
-const AuthRouteChildren: AuthRouteChildren = {
-  AuthLayoutRoute: AuthLayoutRouteWithChildren,
-}
-
-const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+const LayoutRouteWithChildren =
+  LayoutRoute._addFileChildren(LayoutRouteChildren)
 
 export interface FileRoutesByFullPath {
-  '': typeof AuthLayoutRouteWithChildren
+  '': typeof LayoutRouteWithChildren
   '/login': typeof LoginRoute
-  '/search': typeof AuthLayoutSearchRoute
-  '/': typeof AuthLayoutIndexRoute
-  '/books/series': typeof AuthLayoutBooksSeriesRoute
-  '/list/detail': typeof AuthLayoutListDetailRoute
-  '/list/register': typeof AuthLayoutListRegisterRoute
-  '/list': typeof AuthLayoutListIndexRoute
+  '/search': typeof LayoutSearchRoute
+  '/': typeof LayoutIndexRoute
+  '/books/series': typeof LayoutBooksSeriesRoute
+  '/list/detail': typeof LayoutListDetailRoute
+  '/list/register': typeof LayoutListRegisterRoute
+  '/list': typeof LayoutListIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/search': typeof AuthLayoutSearchRoute
-  '/': typeof AuthLayoutIndexRoute
-  '/books/series': typeof AuthLayoutBooksSeriesRoute
-  '/list/detail': typeof AuthLayoutListDetailRoute
-  '/list/register': typeof AuthLayoutListRegisterRoute
-  '/list': typeof AuthLayoutListIndexRoute
+  '/search': typeof LayoutSearchRoute
+  '/': typeof LayoutIndexRoute
+  '/books/series': typeof LayoutBooksSeriesRoute
+  '/list/detail': typeof LayoutListDetailRoute
+  '/list/register': typeof LayoutListRegisterRoute
+  '/list': typeof LayoutListIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/_auth': typeof AuthRouteWithChildren
+  '/_layout': typeof LayoutRouteWithChildren
   '/login': typeof LoginRoute
-  '/_auth/_layout': typeof AuthLayoutRouteWithChildren
-  '/_auth/_layout/search': typeof AuthLayoutSearchRoute
-  '/_auth/_layout/': typeof AuthLayoutIndexRoute
-  '/_auth/_layout/books/series': typeof AuthLayoutBooksSeriesRoute
-  '/_auth/_layout/list/detail': typeof AuthLayoutListDetailRoute
-  '/_auth/_layout/list/register': typeof AuthLayoutListRegisterRoute
-  '/_auth/_layout/list/': typeof AuthLayoutListIndexRoute
+  '/_layout/search': typeof LayoutSearchRoute
+  '/_layout/': typeof LayoutIndexRoute
+  '/_layout/books/series': typeof LayoutBooksSeriesRoute
+  '/_layout/list/detail': typeof LayoutListDetailRoute
+  '/_layout/list/register': typeof LayoutListRegisterRoute
+  '/_layout/list/': typeof LayoutListIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -227,7 +201,6 @@ export interface FileRouteTypes {
     | '/list'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | ''
     | '/login'
     | '/search'
     | '/'
@@ -237,25 +210,24 @@ export interface FileRouteTypes {
     | '/list'
   id:
     | '__root__'
-    | '/_auth'
+    | '/_layout'
     | '/login'
-    | '/_auth/_layout'
-    | '/_auth/_layout/search'
-    | '/_auth/_layout/'
-    | '/_auth/_layout/books/series'
-    | '/_auth/_layout/list/detail'
-    | '/_auth/_layout/list/register'
-    | '/_auth/_layout/list/'
+    | '/_layout/search'
+    | '/_layout/'
+    | '/_layout/books/series'
+    | '/_layout/list/detail'
+    | '/_layout/list/register'
+    | '/_layout/list/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  AuthRoute: typeof AuthRouteWithChildren
+  LayoutRoute: typeof LayoutRouteWithChildren
   LoginRoute: typeof LoginRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  AuthRoute: AuthRouteWithChildren,
+  LayoutRoute: LayoutRouteWithChildren,
   LoginRoute: LoginRoute,
 }
 
@@ -269,54 +241,47 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/_auth",
+        "/_layout",
         "/login"
       ]
     },
-    "/_auth": {
-      "filePath": "_auth.tsx",
+    "/_layout": {
+      "filePath": "_layout.tsx",
       "children": [
-        "/_auth/_layout"
+        "/_layout/search",
+        "/_layout/",
+        "/_layout/books/series",
+        "/_layout/list/detail",
+        "/_layout/list/register",
+        "/_layout/list/"
       ]
     },
     "/login": {
       "filePath": "login.tsx"
     },
-    "/_auth/_layout": {
-      "filePath": "_auth/_layout.tsx",
-      "parent": "/_auth",
-      "children": [
-        "/_auth/_layout/search",
-        "/_auth/_layout/",
-        "/_auth/_layout/books/series",
-        "/_auth/_layout/list/detail",
-        "/_auth/_layout/list/register",
-        "/_auth/_layout/list/"
-      ]
+    "/_layout/search": {
+      "filePath": "_layout/search.tsx",
+      "parent": "/_layout"
     },
-    "/_auth/_layout/search": {
-      "filePath": "_auth/_layout/search.tsx",
-      "parent": "/_auth/_layout"
+    "/_layout/": {
+      "filePath": "_layout/index.tsx",
+      "parent": "/_layout"
     },
-    "/_auth/_layout/": {
-      "filePath": "_auth/_layout/index.tsx",
-      "parent": "/_auth/_layout"
+    "/_layout/books/series": {
+      "filePath": "_layout/books/series.tsx",
+      "parent": "/_layout"
     },
-    "/_auth/_layout/books/series": {
-      "filePath": "_auth/_layout/books/series.tsx",
-      "parent": "/_auth/_layout"
+    "/_layout/list/detail": {
+      "filePath": "_layout/list/detail.tsx",
+      "parent": "/_layout"
     },
-    "/_auth/_layout/list/detail": {
-      "filePath": "_auth/_layout/list/detail.tsx",
-      "parent": "/_auth/_layout"
+    "/_layout/list/register": {
+      "filePath": "_layout/list/register.tsx",
+      "parent": "/_layout"
     },
-    "/_auth/_layout/list/register": {
-      "filePath": "_auth/_layout/list/register.tsx",
-      "parent": "/_auth/_layout"
-    },
-    "/_auth/_layout/list/": {
-      "filePath": "_auth/_layout/list/index.tsx",
-      "parent": "/_auth/_layout"
+    "/_layout/list/": {
+      "filePath": "_layout/list/index.tsx",
+      "parent": "/_layout"
     }
   }
 }

@@ -4,6 +4,7 @@ import {
 	Outlet,
 	createFileRoute,
 	createLink,
+	redirect,
 } from "@tanstack/react-router";
 import {
 	NavigationMenu,
@@ -13,8 +14,13 @@ import {
 	navigationMenuTriggerStyle,
 } from "#/components/ui/navigation-menu";
 
-export const Route = createFileRoute("/_auth/_layout")({
+export const Route = createFileRoute("/_layout")({
 	component: RouteComponent,
+	beforeLoad: async ({ context }) => {
+		if (!context.isAuth) {
+			throw redirect({ to: "/login" });
+		}
+	},
 });
 
 function RouteComponent() {

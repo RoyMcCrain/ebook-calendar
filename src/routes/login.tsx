@@ -1,9 +1,4 @@
-import {
-	SignInButton,
-	SignedIn,
-	SignedOut,
-	UserButton,
-} from "@clerk/clerk-react";
+import { SignIn, SignedIn, SignedOut, UserProfile } from "@clerk/clerk-react";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/login")({
@@ -12,12 +7,12 @@ export const Route = createFileRoute("/login")({
 
 function RouteComponent() {
 	return (
-		<div>
+		<div className="flex h-screen flex-col items-center justify-center">
 			<SignedOut>
-				<SignInButton />
+				<SignIn />
 			</SignedOut>
 			<SignedIn>
-				<UserButton />
+				<UserProfile />
 			</SignedIn>
 		</div>
 	);
